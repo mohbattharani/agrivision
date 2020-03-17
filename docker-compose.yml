@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:4.2.3
+
+  db:
+    build: ./Dockerfiles/db
+    volumes:
+      - .:/main
+    depends_on:
+      - mongo
+    command: python3 db_script.py
+
+  model:
+    build: ./Dockerfiles/model
+    volumes:
+    - .:/main
+    depends_on:
+      - mongo
+    command: python3 yolo_db.py
+
+  backup:
+    build:
+      ./Dockerfiles/backup
+    volumes:
+    - .:/main
+    depends_on:
+      - mongo
+    command: python3 backup.py
+volumes:
+  mongodb:
+    driver: local
+
