@@ -55,15 +55,15 @@ class DbUp:
     def add_to_database(self):
         current_date = datetime.now()
         # get last date by subtracting 1 day time from current date
-        yesterday_date = current_date - timedelta(days=1)
+        yesterday_date = current_date - timedelta(days=2)
         y_date_format = yesterday_date.strftime('%Y-%m-%d')
         print('Adding Images')
         self.images_add(y_date_format)
 
     # update after 24 hours
     def update_24(self):
-        schedule.every().day.at('00:01').do(self.add_to_database)
-        # schedule.every(25).seconds.do(self.add_to_database)
+        # schedule.every().day.at('00:01').do(self.add_to_database)
+        schedule.every(25).seconds.do(self.add_to_database)
         print('Database is UP')
         # schedule.run_all()
         while True:
