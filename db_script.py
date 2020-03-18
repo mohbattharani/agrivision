@@ -55,7 +55,7 @@ class DbUp:
     def add_to_database(self):
         current_date = datetime.now()
         # get last date by subtracting 1 day time from current date
-        yesterday_date = current_date - timedelta(days=2)
+        yesterday_date = current_date - timedelta(days=1)
         y_date_format = yesterday_date.strftime('%Y-%m-%d')
         print('Adding Images')
         self.images_add(y_date_format)
