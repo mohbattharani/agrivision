@@ -24,7 +24,7 @@ class DbUp:
 # Add to database
     def images_add(self, date):
         # posts = []
-        for cam in cfg.cam_ids:
+        for cam in cfg.cam_info.keys():
             # get image list
             try:
                 images = os.listdir(os.path.join(cfg.directories.get('main_dir'), cam, date))
