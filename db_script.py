@@ -62,8 +62,8 @@ class DbUp:
 
     # update after 24 hours
     def update_24(self):
-        schedule.every().day.at('00:01').do(self.add_to_database)
-        # schedule.every(25).seconds.do(self.add_to_database)
+        # schedule.every().day.at('00:01').do(self.add_to_database)
+        schedule.every(25).seconds.do(self.add_to_database)
         print('Database is UP')
         # schedule.run_all()
         while True:
