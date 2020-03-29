@@ -8,6 +8,7 @@ client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_c
 db = client[cfg.mongo_cfg.get('db_name')]
 collection = db[cfg.mongo_cfg.get('db_raw_clc')]
 
+
 def db(yolo_model, save=False):
     while True:
         documents = collection.find({"Predictions": {"$exists": False}})
@@ -36,19 +37,3 @@ def db(yolo_model, save=False):
 if __name__ == '__main__':
     yolo_model = YOLO()
     db(yolo_model, save=False)
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
-    savedir = cfg.savedir
-    db_connect()
-    db
