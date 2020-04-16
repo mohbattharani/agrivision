@@ -41,6 +41,7 @@ def filter_data(dir_path: str, cam_info: Dict, num_days: Optional[int] = 5) -> N
         path = os.path.join(dir_path, cam_id)
         image_dir = os.path.join(os.path.join(path, 'JPEGImages'))
         images = os.listdir(image_dir)
+        image_paths = [os.path.join(image_dir, image) for image in images]
         splits = data_split(file_list=images, num_splits=num_days)
         starting_date = datetime.now() + timedelta(days=1)
 
@@ -51,7 +52,7 @@ def filter_data(dir_path: str, cam_info: Dict, num_days: Optional[int] = 5) -> N
             if not os.path.exists(folder_path):
                 os.mkdir(folder_path)
             # rename and move
-            image_list = images[start:end]
+            image_list = image_paths[start:end]
             rename_move(file_paths=image_list, destination_path=folder_path)
             # update folder
             starting_date += timedelta(days=1)  # Add to move on to next date
