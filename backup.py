@@ -1,8 +1,10 @@
+import os
 import subprocess
-import schedule
 import time
 from datetime import datetime
-import os
+
+import schedule
+
 import cfg
 
 

@@ -22,7 +22,6 @@
 # model.load_weights('logs/yolo-new/trained_weights_final.h5', by_name=True, skip_mismatch=True)
 # model.save('yolo_model.h5')
 
-import keras
 from keras.models import load_model
 
 model = load_model('yolo_model.h5')

@@ -1,8 +1,10 @@
-from pymongo import MongoClient
-from model.yolo import YOLO
-import cfg
 import os
+
 from PIL import Image
+from pymongo import MongoClient
+
+import cfg
+from model.yolo import YOLO
 
 client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_cfg.get('db_server').get('port')))
 db = client[cfg.mongo_cfg.get('db_name')]

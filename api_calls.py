@@ -1,8 +1,11 @@
-from pymongo import MongoClient, GEO2D
+from datetime import datetime, timedelta
+
+import numpy as np
+from pymongo import MongoClient
+
 # noinspection PyUnresolvedReferences
 import cfg
-from datetime import datetime, timedelta
-import numpy as np
+
 # Mongo initialization
 client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_cfg.get('db_server').get('port')))
 

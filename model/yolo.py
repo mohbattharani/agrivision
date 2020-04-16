@@ -5,19 +5,16 @@ Class definition of YOLO_v3 style detection model on image and video
 
 import colorsys
 import os
-import tensorflow as tf
-from timeit import default_timer as timer
 
 import numpy as np
+from PIL import ImageFont, ImageDraw
 from keras import backend as K
-from keras.models import load_model
 from keras.layers import Input
-from PIL import Image, ImageFont, ImageDraw
+from keras.models import load_model
+from keras.utils import multi_gpu_model
 
 from model.yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
 from model.yolo3.utils import letterbox_image
-import os
-from keras.utils import multi_gpu_model
 
 
 class YOLO(object):

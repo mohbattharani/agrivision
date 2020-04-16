@@ -1,12 +1,13 @@
-from pymongo import MongoClient, GEO2D
-from pymongo.errors import DuplicateKeyError
 import os
-# noinspection PyUnresolvedReferences
-import cfg
-import schedule
-import subprocess
 import time
 from datetime import datetime, timedelta
+
+import schedule
+from pymongo import MongoClient, GEO2D
+from pymongo.errors import DuplicateKeyError
+
+# noinspection PyUnresolvedReferences
+import cfg
 
 # Mongo initialization
 client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_cfg.get('db_server').get('port')))
