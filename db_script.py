@@ -71,7 +71,18 @@ class DbUp:
             schedule.run_pending()
             time.sleep(1)
 
+    # add all available data to database
+    def get_all_data(self, start_date, num_days=5):
+        # get last date by subtracting 1 day time from current date
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        for day in range(num_days + 1):
+            date = start_date + timedelta(days=day)
+            date_format = date.strftime('%Y-%m-%d')
+            print(f'Adding Images for date {date_format}')
+            self.images_add(date_format)
+
 
 if __name__ == '__main__':
     server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
-    server.update_24()
+    # server.update_24()
+    server.get_all_data('2020-04-17')
