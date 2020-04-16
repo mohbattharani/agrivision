@@ -5,7 +5,7 @@ from typing import Union, Optional, Dict, List
 import cfg
 
 
-def rename_move(file_paths: List,  destination_path: Union[os.path, str], start_time: Optional[str] = '09-00-00',
+def rename_move(file_paths: List,  destination_path: str, start_time: Optional[str] = '09-00-00',
                 end_time: Optional[str] = '06-30-00') -> None:
 
     start_time = datetime.strptime(start_time, '%H-%M-%S')
@@ -36,7 +36,7 @@ def data_split(file_list: List, num_splits: int) -> List:
     return splits
 
 
-def filter_data(dir_path: Union[os.path, str], cam_info: Dict, num_days: Optional[int] = 5) -> None:
+def filter_data(dir_path: str, cam_info: Dict, num_days: Optional[int] = 5) -> None:
     for cam_id in cam_info.keys():
         path = os.path.join(dir_path, cam_id)
         image_dir = os.path.join(os.path.join('JPEGImages', path))
