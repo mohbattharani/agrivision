@@ -39,7 +39,7 @@ def data_split(file_list: List, num_splits: int) -> List:
 def filter_data(dir_path: str, cam_info: Dict, num_days: Optional[int] = 5) -> None:
     for cam_id in cam_info.keys():
         path = os.path.join(dir_path, cam_id)
-        image_dir = os.path.join(os.path.join('JPEGImages', path))
+        image_dir = os.path.join(os.path.join(path, 'JPEGImages'))
         images = os.listdir(image_dir)
         splits = data_split(file_list=images, num_splits=num_days)
         starting_date = datetime.now() + timedelta(days=1)
