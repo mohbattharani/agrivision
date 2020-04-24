@@ -10,7 +10,7 @@ import cfg
 client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_cfg.get('db_server').get('port')))
 
 
-class api_call:
+class ApiCall:
     def __init__(self, db, clc):
         # specify which db to use
         self.db = client[db]
@@ -35,21 +35,22 @@ class api_call:
 
         return count
 
-    def graph_day(self, date, camid=None):
+    def day_graph(self, date, camid=None):
         if camid is None:
             documents = self.collection.find({"date": date, "Predictions": {"$exists": True}})
         else:
             documents = self.collection.find({"cam_id": camid, "date": date, "Predictions": {"$exists": True}})
         times = []
         count = []
+
         for document in documents:
             pred = document.get("Predictions")
             times.append(document.get("time"))
             count.append(len(pred))
 
-        return times, count
+        return dict(zip(times, count))
 
-    def graph_range(self, start_date, end_date, date_format='%Y-%m-%d', camid=None):
+    def range_graph(self, start_date, end_date, date_format='%Y-%m-%d', camid=None):
         # start and end date must be in the format YYYY-MM-DD
         days_diff = (datetime.strptime(start_date, date_format) - datetime.strptime(end_date, date_format)).days
         dates = np.array([(start_date + timedelta(inc)).strftime('%Y-%m-%d') for inc in range(0, days_diff + 1)])
@@ -64,9 +65,9 @@ class api_call:
             index = np.where(dates==date)[0]
             count[index] += len(pred)
 
-        return dates, count
+        return dict(zip(dates, count))
 
 
 if __name__ == '__main__':
-    server = api_call(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
+    server = ApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
 
