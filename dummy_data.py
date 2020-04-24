@@ -6,7 +6,7 @@ import cfg
 
 
 def rename_move(file_paths: List,  destination_path: str, start_time: Optional[str] = '09-00-00',
-                end_time: Optional[str] = '06-30-00') -> None:
+                end_time: Optional[str] = '18-30-00') -> None:
 
     start_time = datetime.strptime(start_time, '%H-%M-%S')
     end_time = datetime.strptime(end_time, '%H-%M-%S')

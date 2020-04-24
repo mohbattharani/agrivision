@@ -25,10 +25,38 @@ def day_graph():
         graph_values = api.day_graph(date=data['date'], camid=data['camid'])
     if not graph_values:
         resp = jsonify({'status': 'Data does not exist'})
-        resp.status_code = 404
+        resp.status_code = 400
         return resp
     return jsonify(graph_values)
 
 
+@app.route('/range_graph', methods=['POST'])
+def day_graph():
+    try:
+        data = json.loads(request.data)
+    except ValueError:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+    if 'start_date' and 'end_date' not in data:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+    if 'camid' not in data:
+        graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'])
+    else:
+        graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'], camid=data['camid'])
+    if not graph_values:
+        resp = jsonify({'status': 'Data does not exist'})
+        resp.status_code = 400
+        return resp
+    return jsonify(graph_values)
+
+
+@app.route('/total_trash')
+def trash_count():
+
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=True)
