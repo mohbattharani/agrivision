@@ -85,4 +85,4 @@ class DbUp:
 if __name__ == '__main__':
     server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
     # server.update_24()
-    server.get_all_data('2020-04-17')
+    server.get_all_data('2020-04-25')
