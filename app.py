@@ -31,7 +31,7 @@ def day_graph():
 
 
 @app.route('/range_graph', methods=['POST'])
-def day_graph():
+def range_graph():
     try:
         data = json.loads(request.data)
     except ValueError:
