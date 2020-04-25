@@ -67,6 +67,29 @@ class ApiCall:
 
         return dict(zip(dates, count))
 
+    # calculating time for maximum trash
+    def max_trash_hours(self, camid=None):
+        if camid is None:
+            documents = self.collection.find({"Predictions": {"$exists": True}})
+        else:
+            documents = self.collection.find({"cam_id": camid, "Predictions": {"$exists": True}})
+
+        times = []
+        count = []
+
+        for document in documents:
+            pred = document.get("Predictions")
+            times.append(document.get("time"))
+            count.append(len(pred))
+
+
+
+    def max_trash_days(self, camid=None):
+        if camid is None:
+            documents = self.collection.find({"Predictions": {"$exists": True}})
+        else:
+            documents = self.collection.find({"cam_id": camid, "Predictions": {"$exists": True}})
+
 
 if __name__ == '__main__':
     server = ApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))

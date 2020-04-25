@@ -53,9 +53,19 @@ def day_graph():
     return jsonify(graph_values)
 
 
-@app.route('/total_trash')
+@app.route('/total_trash', methods=['POST'])
 def trash_count():
-
+    try:
+        data = json.loads(request.data)
+    except ValueError:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+    if 'camid' not in data:
+        total_trash = api.trash_count()
+    else:
+        total_trash = api.trash_count(camid=data['camid'])
+    return jsonify(total_trash)
 
 
 if __name__ == '__main__':
