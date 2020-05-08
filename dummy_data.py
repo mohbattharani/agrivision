@@ -72,7 +72,7 @@ def folder_division(dir_path: str, src_folder: str, cam_info: Dict):
         folder_path = os.path.join(dir_path, cam_id)
         if not os.path.exists(folder_path):
             os.mkdir(folder_path)
-            os.mkdir(folder_path, 'JPEGImages')
+            os.mkdir(os.path.join(folder_path, 'JPEGImages'))
         image_list = image_paths[start:end]
         rename_move(file_paths=image_list, destination_path=os.path.join(folder_path, 'JPEGImages'))
         count +=1
