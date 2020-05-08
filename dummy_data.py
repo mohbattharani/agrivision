@@ -79,5 +79,5 @@ def folder_division(dir_path: str, src_folder: str, cam_info: Dict):
 
 
 if __name__ == '__main__':
-    # filter_data(dir_path=cfg.directories.get('main_dir'), cam_info=cfg.cam_info)
-    folder_division(dir_path=cfg.directories.get('main_dir'), src_folder='VOC_DATASET', cam_info=cfg.cam_info)
+    filter_data(dir_path=cfg.directories.get('main_dir'), cam_info=cfg.cam_info, num_days=25)
+    # folder_division(dir_path=cfg.directories.get('main_dir'), src_folder='VOC_DATASET', cam_info=cfg.cam_info)
