@@ -39,10 +39,33 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
     return final_array
 
 
+def get_data_range(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
+
+    if cam_id is None:
+        req = {"start_date": start_date, "end_date": end_date}
+    else:
+        req = {"start_date": start_date, "end_date": end_date, "camid": cam_id}
+
+    req = json.dumps(req)
+    x = requests.post(url, data=req)
+    x = json.loads(x.text)
+    dates, trash_count = zip(*x.items())
+    trash_count = list(map(int, trash_count))
+
+    # n = len(date_list)
+    # date_list, time_list, trash_list = np.asarray(date_list).reshape(n, 1), np.asarray(time_list).reshape(n, 1),\
+    #                                    np.asarray(trash_list).reshape(n, 1)
+    # final_array = np.concatenate([date_list, time_list, trash_list])
+    final_array = {'Date': dates, 'Count': trash_count}
+    return final_array
+
+
 if __name__ == '__main__':
     day_url = 'http://0.0.0.0:5000/day_graph'
-    array_list = get_data(day_url, start_date='2020-05-10', end_date='2020-06-03')
+    range_url = 'http://0.0.0.0:5000/range_graph'
 
+    # array_list = get_data(day_url, start_date='2020-05-10', end_date='2020-06-03')
+    array_list = get_data_range(range_url, start_date='2020-05-10', end_date='2020-06-03')
     df = pd.DataFrame(data=array_list)
 
-    df.to_csv('data.csv', index=False)
+    df.to_csv('data_range.csv', index=False)

@@ -47,7 +47,7 @@ def range_graph():
     else:
         graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'], camid=data['camid'])
     if not graph_values:
-        resp = jsonify({'status': 'Data does not exist'})
+        resp = jsonify({'status': False})
         resp.status_code = 400
         return resp
     return jsonify(graph_values)
