@@ -22,7 +22,6 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
         req = json.dumps(req)
         x = requests.post(url, data=req)
         times, trash_count = zip(*json.loads(x.text).items())
-        print(x.text)
         trash_count = list(map(int, trash_count))
         date_list.extend([date for i in range(len(times))])
         time_list.extend(times)
@@ -37,7 +36,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
 
 if __name__ == '__main__':
     day_url = 'http://0.0.0.0:5000/day_graph'
-    array_list = get_data(day_url, start_date='2020-05-10', end_date='2020-06-04')
+    array_list = get_data(day_url, start_date='2020-05-10', end_date='2020-06-03')
 
     df = pd.DataFrame(data=array_list, index=['Date', 'Time', 'Count'])
     df.to_csv('data.csv', index=False)
