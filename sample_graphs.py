@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta
 import requests
 import numpy as np
+import pandas as pd
 
 
 def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
@@ -35,7 +36,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
 
 if __name__ == '__main__':
     day_url = 'http://0.0.0.0:5000/day_graph'
-    array_list = get_data(day_url, start_date='2020-04')
+    array_list = get_data(day_url, start_date='2020-05-10', end_date='2020-06-04')
 
-    np.savetxt('data.csv', array_list)
-
+    df = pd.DataFrame(data=array_list, index=['Date', 'Time', 'Count'])
+    df.to_csv('data.csv', index=False)
