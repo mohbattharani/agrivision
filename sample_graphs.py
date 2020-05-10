@@ -21,8 +21,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
         
         req = json.dumps(req)
         x = requests.post(url, data=req)
-        print(x.text)
-        print(x.text['status'])
+        print(type(x.text))
         # if x.text['status'] is False:
         #     continue
         times, trash_count = zip(*json.loads(x.text).items())
