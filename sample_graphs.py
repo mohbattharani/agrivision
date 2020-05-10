@@ -31,6 +31,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
         date_list.extend([date for i in range(len(times))])
         time_list.extend(times)
         trash_list.extend(trash_count)
+        print('ok')
 
     n = len(date_list)
     date_list, time_list, trash_list = np.asarray(date_list).reshape(n, 1), np.asarray(time_list).reshape(n, 1),\
