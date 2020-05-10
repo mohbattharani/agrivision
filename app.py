@@ -24,7 +24,7 @@ def day_graph():
     else:
         graph_values = api.day_graph(date=data['date'], camid=data['camid'])
     if not graph_values:
-        resp = jsonify({'status': 'Data does not exist'})
+        resp = jsonify({'status': False})
         resp.status_code = 400
         return resp
     return jsonify(graph_values)
