@@ -22,7 +22,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
         req = json.dumps(req)
         x = requests.post(url, data=req)
         x = json.loads(x.text)
-        print(type(x))
+        print(x['status'])
         break
         # if x.text['status'] is False:
         #     continue
