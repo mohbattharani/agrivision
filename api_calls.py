@@ -26,6 +26,7 @@ class Months(enum.Enum):
     November = '11'
     December = '12'
 
+
 class ApiCall:
     def __init__(self, db, clc):
         # specify which db to use
