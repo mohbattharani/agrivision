@@ -24,7 +24,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
         x = json.loads(x.text)
         # if x.text['status'] is False:
         #     continue
-        times, trash_count = zip(x.items())
+        times, trash_count = zip(*x.items())
         trash_count = list(map(int, trash_count))
         date_list.extend([date for i in range(len(times))])
         time_list.extend(times)
