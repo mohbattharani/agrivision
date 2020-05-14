@@ -49,32 +49,39 @@ class GoogleSheetApi:
 
         self.worksheet_exists('All Stats', all_stats_flag=True)
 
+    @property
+    def day_diff_check(self) -> bool:
+        latest_date = datetime.now() - timedelta(days=1)
+        if self.starting_date is not None:
+            days_diff = abs((latest_date - datetime.strptime(self.starting_date, self.date_format)).days)
+            return True if days_diff > 0 else False
+        else:
+            return False
+
     def update_sheet(self, sheet_title, camid=None):
         sheet = self.spreadsheet.worksheet(title=sheet_title)
         sheet.resize(sheet.row_count)
         # Get latest date which should be the previous day as data is stored after each day is complete
         latest_date = datetime.now() - timedelta(days=1)
 
-        if self.starting_date is not None:
-            days_diff = abs((latest_date - datetime.strptime(self.starting_date, self.date_format)).days)
-            if days_diff > 0:
-                start_date = self.starting_date
-                end_date = latest_date.strftime(self.date_format)
+        if self.day_diff_check: # Checks for starting date mention and compares with current date
+            start_date = self.starting_date
+            end_date = latest_date.strftime(self.date_format)
 
-                if camid is not None:
-                    req = {"start_date": start_date, "end_date": end_date, 'camid': camid}
-                else:
-                    req = {"start_date": start_date, "end_date": end_date}
+            if camid is not None:
+                req = {"start_date": start_date, "end_date": end_date, 'camid': camid}
+            else:
+                req = {"start_date": start_date, "end_date": end_date}
 
-                req = json.dumps(req)
-                x = requests.post(cfg.api_urls.get('range_data'), data=req)
-                x = json.loads(x.text)
-                dates, trash_count = zip(*x.items())
-                trash_count = list(map(int, trash_count))
-                n = len(dates)
-                dates, trash = np.asarray(dates).reshape(n, 1), np.asarray(trash_count).reshape(n, 1)
-                final_array = np.concatenate((dates, trash), axis=1)
-                sheet.append_rows(final_array.tolist())
+            req = json.dumps(req)
+            x = requests.post(cfg.api_urls.get('range_data'), data=req)
+            x = json.loads(x.text)
+            dates, trash_count = zip(*x.items())
+            trash_count = list(map(int, trash_count))
+            n = len(dates)
+            dates, trash = np.asarray(dates).reshape(n, 1), np.asarray(trash_count).reshape(n, 1)
+            final_array = np.concatenate((dates, trash), axis=1)
+            sheet.append_rows(final_array.tolist())
 
         else:
             date = latest_date
@@ -105,7 +112,7 @@ class GoogleSheetApi:
             daily_trash.pop(0)
             trash_quant = sum(list(map(int, daily_trash)))
             lat_long = ','.join((str(cfg.cam_info.get(camid).get('latitude')),
-                                str(cfg.cam_info.get(camid).get('longitude'))))
+                                 str(cfg.cam_info.get(camid).get('longitude'))))
             update_list.append([camid, trash_quant, lat_long])
 
         all_stats_sheet.append_rows(update_list)
