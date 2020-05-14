@@ -33,7 +33,7 @@ class GoogleSheetApi:
         worksheet_list = self.spreadsheet.worksheets()
         # Create worksheet if it does not exist
         if sheet_id not in worksheet_list:
-            self.spreadsheet.add_worksheet(title=sheet_id)
+            self.spreadsheet.add_worksheet(title=sheet_id, rows=1, cols=2)
             sheet = self.spreadsheet.worksheet(title=sheet_id)
             sheet.resize(1)
             if all_stats_flag:
