@@ -123,6 +123,7 @@ class GoogleSheetApi:
 
     def update_spreadsheet(self):
         # Initialize Worksheets
+        print('update')
         self.initialize_worksheets()
 
         # Update sheets
