@@ -39,7 +39,7 @@ def get_data(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
     return final_array
 
 
-def get_data_range(url, start_date, end_date, cam_id=None, date_format='%Y-%m-%d'):
+def get_data_range(url, start_date, end_date, cam_id=None):
 
     if cam_id is None:
         req = {"start_date": start_date, "end_date": end_date}

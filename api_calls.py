@@ -41,15 +41,23 @@ class ApiCall:
             return self.collection.find({"cam_id": camid})
 
     # get documents that contain predictions
-    def prediction_documents(self, camid=None):
-        if camid is None:
+    def prediction_documents(self, camid=None, date=None):
+        if camid is None and date is None:
             documents = self.collection.find({"Predictions": {"$exists": True}})
-        else:
+
+        elif camid is None and date is not None:
+            documents = self.collection.find({"date": date, "Predictions": {"$exists": True}})
+
+        elif camid is not None and date is None:
             documents = self.collection.find({"cam_id": camid, "Predictions": {"$exists": True}})
+
+        else:
+            documents = self.collection.find({"cam_id": camid, "date": date, "Predictions": {"$exists": True}})
+
         return documents
 
-    def trash_count(self, camid=None):
-        documents = self.prediction_documents(camid=camid)
+    def trash_count(self, camid=None, date=None):
+        documents = self.prediction_documents(camid=camid, date=date)
         count = 0
         for document in documents:
             pred = document.get("Predictions")
@@ -58,10 +66,9 @@ class ApiCall:
         return count
 
     def day_graph(self, date, camid=None):
-        if camid is None:
-            documents = self.collection.find({"date": date, "Predictions": {"$exists": True}})
-        else:
-            documents = self.collection.find({"cam_id": camid, "date": date, "Predictions": {"$exists": True}})
+
+        documents = self.prediction_documents(camid=camid, date=date)
+
         times = []
         count = []
 
@@ -118,11 +125,12 @@ class ApiCall:
             time_slot = int(time.split('-')[0])
             trash_count_hours[time_slot] += trash_count
 
-        time_slots = list(map(str, list(range(24))))
-        trash_count_hour = dict(zip(time_slots, trash_count_hours))
+        # time_slots = list(map(str, list(range(24))))
+        # trash_count_hour = dict(zip(time_slots, trash_count_hours))
         # max trash hour
-        # max_hour = str(max(trash_count_hours)) + '-' + str(max(trash_count_hours)+ 1)
-        return trash_count_hour
+        max_hour = str(np.argmax(trash_count_hours)) + '-' + str(np.argmax(trash_count_hours) + 1)
+
+        return max_hour
 
     @staticmethod
     def day_data_filtering(documents):
@@ -178,8 +186,9 @@ class ApiCall:
             trash_count_month.update({month.name: total_trash})
 
         # returns month containing max trash
-        # max_month = max(trash_count_monthly.items(), key=operator.itemgetter(1))[0]
-        return trash_count_month
+        max_month = max(trash_count_month.items(), key=operator.itemgetter(1))[0]
+
+        return max_month
 
 
 if __name__ == '__main__':

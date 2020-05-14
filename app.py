@@ -19,10 +19,10 @@ def day_graph():
         resp = jsonify({'status': False})
         resp.status_code = 400
         return resp
-    if 'camid' not in data:
-        graph_values = api.day_graph(date=data['date'])
-    else:
-        graph_values = api.day_graph(date=data['date'], camid=data['camid'])
+
+    camid = data['camid'] if 'camid' in data else None
+
+    graph_values = api.day_graph(date=data['date'], camid=camid)
     if not graph_values:
         resp = jsonify({'status': False})
         resp.status_code = 400
@@ -61,12 +61,57 @@ def trash_count():
         resp = jsonify({'status': False})
         resp.status_code = 400
         return resp
-    if 'camid' not in data:
-        total_trash = api.trash_count()
-    else:
-        total_trash = api.trash_count(camid=data['camid'])
+    camid = data['camid'] if 'camid' in data else None
+    date = data['date'] if 'date' in data else None
+    total_trash = api.trash_count(camid=camid, date=date)
+
     return jsonify(total_trash)
 
 
+@app.route('/max_trash_hour', methods=['POST'])
+def max_trash_hour():
+    try:
+        data = json.loads(request.data)
+    except ValueError:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+
+    camid = data['camid'] if 'camid' in data else None
+    trash_hour = api.max_trash_hours(camid=camid)
+
+    return jsonify(trash_hour)
+
+
+@app.route('/max_trash_day', methods=['POST'])
+def max_trash_day():
+    try:
+        data = json.loads(request.data)
+    except ValueError:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+
+    camid = data['camid'] if 'camid' in data else None
+    trash_day = api.max_trash_days(camid=camid)
+
+    return jsonify(trash_day)
+
+
+@app.route('/max_trash_month', methods=['POST'])
+def max_trash_month():
+    try:
+        data = json.loads(request.data)
+    except ValueError:
+        resp = jsonify({'status': False})
+        resp.status_code = 400
+        return resp
+
+    camid = data['camid'] if 'camid' in data else None
+    trash_month = api.max_trash_month(camid=camid)
+
+    return jsonify(trash_month)
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
