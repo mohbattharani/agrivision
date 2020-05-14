@@ -132,7 +132,7 @@ class GoogleSheetApi:
         self.update_all_stats()
 
     def update_24(self):
-        schedule.every().day.at('09:00').do(self.update_spreadsheet())
+        schedule.every().day.at('09:00').do(self.update_spreadsheet)
         print('Google Sheet API is Running')
         while True:
             schedule.run_pending()
