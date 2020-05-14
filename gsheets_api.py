@@ -89,7 +89,7 @@ class GoogleSheetApi:
             sheet.append_row([date, trash_count])
 
     def update_all_stats(self):
-        all_stats_sheet = self.spreadsheet.title(title='All Stats')
+        all_stats_sheet = self.spreadsheet.worksheet(title='All Stats')
         all_stats_sheet.resize(1)
         update_list = list()
         # 1. Get total trash quantity
