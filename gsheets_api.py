@@ -30,7 +30,7 @@ class GoogleSheetApi:
 
     def worksheet_exists(self, sheet_id, all_stats_flag=False):
         # Get the list of worksheets available
-        worksheet_list = self.spreadsheet.worksheets()
+        worksheet_list = [worksheet.title for worksheet in self.spreadsheet.worksheets()]
         # Create worksheet if it does not exist
         if sheet_id not in worksheet_list:
             self.spreadsheet.add_worksheet(title=sheet_id, rows=1, cols=2)
