@@ -49,7 +49,6 @@ class GoogleSheetApi:
 
         self.worksheet_exists('All Stats', all_stats_flag=True)
 
-    @property
     def day_diff_check(self) -> bool:
         latest_date = datetime.now() - timedelta(days=1)
         if self.starting_date is not None:
@@ -64,7 +63,7 @@ class GoogleSheetApi:
         # Get latest date which should be the previous day as data is stored after each day is complete
         latest_date = datetime.now() - timedelta(days=1)
 
-        if self.day_diff_check: # Checks for starting date mention and compares with current date
+        if self.day_diff_check():  # Checks for starting date mention and compares with current date
             start_date = self.starting_date
             end_date = latest_date.strftime(self.date_format)
 
