@@ -106,7 +106,7 @@ class GoogleSheetApi:
             trash_quant = sum(list(map(int, daily_trash)))
             lat_long = ','.join((str(cfg.cam_info.get(camid).get('latitude')),
                                 str(cfg.cam_info.get(camid).get('longitude'))))
-            update_list.append([camid, trash_quant])
+            update_list.append([camid, trash_quant, lat_long])
 
         all_stats_sheet.append_rows(update_list)
 
