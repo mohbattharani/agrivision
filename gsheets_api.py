@@ -50,11 +50,14 @@ class GoogleSheetApi:
         self.worksheet_exists('All Stats', all_stats_flag=True)
 
     def day_diff_check(self) -> bool:
+        print('stage 1')
         latest_date = datetime.now() - timedelta(days=1)
         if self.starting_date is not None:
+            print('stage 2')
             days_diff = abs((latest_date - datetime.strptime(self.starting_date, self.date_format)).days)
             return True if days_diff > 0 else False
         else:
+            print('stage 3')
             return False
 
     def update_sheet(self, sheet_title, camid=None):
