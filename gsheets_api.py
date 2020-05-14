@@ -61,6 +61,7 @@ class GoogleSheetApi:
             return False
 
     def update_sheet(self, sheet_title, camid=None):
+        print('update sheet')
         sheet = self.spreadsheet.worksheet(title=sheet_title)
         sheet.resize(sheet.row_count)
         # Get latest date which should be the previous day as data is stored after each day is complete
@@ -86,6 +87,7 @@ class GoogleSheetApi:
             sheet.append_rows(final_array.tolist())
 
         else:
+            print('Stage_4')
             date = latest_date
             if camid is not None:
                 req = {"date": date, "camid": camid}
