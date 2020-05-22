@@ -86,6 +86,7 @@ class GoogleSheetApi:
             dates, trash = np.asarray(dates).reshape(n, 1), np.asarray(trash_count).reshape(n, 1)
             final_array = np.concatenate((dates, trash), axis=1)
             sheet.append_rows(final_array.tolist())
+            # Set starting date to None after adding data to sheet
             self.starting_date = None
 
         else:
