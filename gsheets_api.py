@@ -19,7 +19,7 @@ class GoogleSheetApi:
     def __init__(self, scope: Optional[List] = None,
                  credential_path: Optional[Union[str, Path]] = r'drive-credentials.json',
                  sheet_name: Optional[str] = r'Trash_DB', starting_date: Optional[str] = None,
-                 date_format: Optional[str] = r'%Y-%m-%d'):
+                 date_format: Optional[str] = r'%Y-%m-%d', reset: Optional[bool] = False):
         # Initialize scope and access spreadsheet
         gscope = scope if scope else GoogleSheetApi.__DEFAULT_SCOPE
         creds = ServiceAccountCredentials.from_json_keyfile_name(credential_path, gscope)
@@ -27,6 +27,7 @@ class GoogleSheetApi:
         self.spreadsheet = client.open(sheet_name)
         self.starting_date = starting_date
         self.date_format = date_format
+        self.sheet_reset = reset
 
     def worksheet_exists(self, sheet_id, all_stats_flag=False):
         # Get the list of worksheets available
@@ -60,7 +61,10 @@ class GoogleSheetApi:
 
     def update_sheet(self, sheet_title, camid=None):
         sheet = self.spreadsheet.worksheet(title=sheet_title)
-        sheet.resize(sheet.row_count)
+        if self.sheet_reset:
+            sheet.resize(1)
+        else:
+            sheet.resize(sheet.row_count)
         # Get latest date which should be the previous day as data is stored after each day is complete
         latest_date = datetime.now() - timedelta(days=1)
 
@@ -82,6 +86,7 @@ class GoogleSheetApi:
             dates, trash = np.asarray(dates).reshape(n, 1), np.asarray(trash_count).reshape(n, 1)
             final_array = np.concatenate((dates, trash), axis=1)
             sheet.append_rows(final_array.tolist())
+            self.starting_date = None
 
         else:
             date = latest_date
@@ -128,6 +133,9 @@ class GoogleSheetApi:
         for camid in cfg.cam_info.keys():
             self.update_sheet(sheet_title=camid, camid=camid)
 
+        # Set reset flag to false if already set to True
+        if self.sheet_reset:
+            self.sheet_reset = False
         # 3. Update All Stats Sheet
         self.update_all_stats()
 
@@ -140,5 +148,5 @@ class GoogleSheetApi:
 
 
 if __name__ == '__main__':
-    gsheet_api = GoogleSheetApi(starting_date='2020-05-10')
+    gsheet_api = GoogleSheetApi(starting_date='2020-05-10', reset=True)
     gsheet_api.update_24()
