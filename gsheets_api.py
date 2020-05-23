@@ -86,8 +86,6 @@ class GoogleSheetApi:
             dates, trash = np.asarray(dates).reshape(n, 1), np.asarray(trash_count).reshape(n, 1)
             final_array = np.concatenate((dates, trash), axis=1)
             sheet.append_rows(final_array.tolist())
-            # Set starting date to None after adding data to sheet
-            self.starting_date = None
 
         else:
             date = latest_date
@@ -139,6 +137,9 @@ class GoogleSheetApi:
             self.sheet_reset = False
         # 3. Update All Stats Sheet
         self.update_all_stats()
+
+        # Set starting date to None after adding data to sheet
+        self.starting_date = None
 
     def update_24(self):
         schedule.every().day.at('09:00').do(self.update_spreadsheet)
