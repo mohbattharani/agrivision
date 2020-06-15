@@ -28,6 +28,30 @@ services:
     depends_on:
       - mongo
     command: python3 backup.py
+
+  flask_app:
+    build:
+      ./Dockerfiles/app
+    volumes:
+    - .:/main
+    ports:
+    - 5000:5000
+    depends_on:
+      - mongo
+      - db
+      - model
+      - backup
+    command: python3 app.py
+
+  gsheets:
+    build:
+      ./Dockerfiles/gsheets
+    volumes:
+    - .:/main
+    depends_on:
+      - flask_app
+    command: python3 gsheets_api.py
+
 volumes:
   mongodb:
     driver: local
