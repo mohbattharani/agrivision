@@ -1,3 +1,7 @@
+"""
+This script is used for communication with google sheets and updating them with meaningful data from MongoDB database.
+"""
+
 from pathlib import Path
 from typing import Optional, List, Union
 from datetime import datetime, timedelta
@@ -14,22 +18,72 @@ import cfg
 
 
 class GoogleSheetApi:
-    __DEFAULT_SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    """
+    Class for Google Sheets communications to store meaningful information from MongoDB database
+
+    Attributes
+    ----------
+    spreadsheet
+        Google Sheet for storing data on google drive
+    starting_date : str
+        starting date from which the data is supposed to be retrieved
+    date_format : str
+        Date format of the starting and ending date
+    sheet_reset : bool
+        Flag for clearing out all sheets and recomputing results
+
+    Methods
+    -------
+    update_24(time='09:00')
+        Calls the update_worksheet method at a specified time everyday
+    """
+
+    _DEFAULT_SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
     def __init__(self, scope: Optional[List] = None,
                  credential_path: Optional[Union[str, Path]] = r'drive-credentials.json',
                  sheet_name: Optional[str] = r'Trash_DB', starting_date: Optional[str] = None,
                  date_format: Optional[str] = r'%Y-%m-%d', reset: Optional[bool] = False):
+        """
+        Parameters
+        ----------
+        scope : list, optional
+            Scope of access granted from google drive (Default is None)
+        credential_path : str, optional
+            Path to the credential file for google drive access (Default is 'drive-credentials.json')
+        sheet_name : str, optional
+            Name of the sheet to be accessed (Default is 'Trash_DB')
+        starting_date : str, optional
+            starting date from which the data is supposed to be retrieved
+        date_format : str, optional
+            Date format of the starting and ending date (Default is '%Y-%m-%d')
+        reset : bool, optional
+            Flag for clearing out all sheets and recomputing results
+        """
+
         # Initialize scope and access spreadsheet
-        gscope = scope if scope else GoogleSheetApi.__DEFAULT_SCOPE
+        gscope = scope if scope else GoogleSheetApi._DEFAULT_SCOPE
         creds = ServiceAccountCredentials.from_json_keyfile_name(credential_path, gscope)
         client = gspread.authorize(creds)
+
         self.spreadsheet = client.open(sheet_name)
         self.starting_date = starting_date
         self.date_format = date_format
         self.sheet_reset = reset
 
-    def worksheet_exists(self, sheet_id, all_stats_flag=False):
+    def worksheet_exists(self, sheet_id, all_stats_flag: Optional[bool] = False) -> None:
+        """
+        Checks if the specified sheet exists. If it does not then it creates it.
+
+
+        Parameters
+        ----------
+        sheet_id : str
+            Name of the sheet to be checked
+        all_stats_flag : bool, optional
+            Flag for all stats sheet
+        """
+
         # Get the list of worksheets available
         worksheet_list = [worksheet.title for worksheet in self.spreadsheet.worksheets()]
         # Create worksheet if it does not exist
@@ -43,6 +97,10 @@ class GoogleSheetApi:
                 sheet.append_row(['Date', 'Trash Quantity'])
 
     def initialize_worksheets(self):
+        """
+        Initializes the worksheets by using the worksheet_exists function
+        """
+
         self.worksheet_exists('Total')
 
         for camid in cfg.cam_info.keys():
@@ -52,6 +110,14 @@ class GoogleSheetApi:
 
     @property
     def day_diff_check(self) -> bool:
+        """
+        Checks if the entered dates are correct
+
+        Returns
+        -------
+        Bool value (True or False)
+        """
+
         latest_date = datetime.now() - timedelta(days=1)
         if self.starting_date is not None:
             days_diff = abs((latest_date - datetime.strptime(self.starting_date, self.date_format)).days)
@@ -59,7 +125,18 @@ class GoogleSheetApi:
         else:
             return False
 
-    def update_sheet(self, sheet_title, camid=None):
+    def update_sheet(self, sheet_title, camid: Optional[str ] = None):
+        """
+        Updates specified sheet with dates and their corresponding number of predictions from MongoDB.
+
+        Parameters
+        ----------
+        sheet_title : str
+            Name of the sheet to be updated
+        camid : str, optional
+            Camera ID of camera node for which the data is supposed to be retrieved (Default is None)
+        """
+
         sheet = self.spreadsheet.worksheet(title=sheet_title)
         if self.sheet_reset:
             sheet.resize(1)
@@ -88,7 +165,7 @@ class GoogleSheetApi:
             sheet.append_rows(final_array.tolist())
 
         else:
-            date = latest_date
+            date = latest_date.strftime(self.date_format)
             if camid is not None:
                 req = {"date": date, "camid": camid}
             else:
@@ -100,6 +177,10 @@ class GoogleSheetApi:
             sheet.append_row([date, trash_count])
 
     def update_all_stats(self):
+        """
+        Updates all stats sheet
+        """
+
         all_stats_sheet = self.spreadsheet.worksheet(title='All Stats')
         all_stats_sheet.resize(1)
         update_list = list()
@@ -121,7 +202,11 @@ class GoogleSheetApi:
 
         all_stats_sheet.append_rows(update_list)
 
-    def update_spreadsheet(self):
+    def update_worksheet(self):
+        """
+        Updates all worksheets
+        """
+
         # Initialize Worksheets
         self.initialize_worksheets()
 
@@ -141,8 +226,17 @@ class GoogleSheetApi:
         # Set starting date to None after adding data to sheet
         self.starting_date = None
 
-    def update_24(self):
-        schedule.every().day.at('09:00').do(self.update_spreadsheet)
+    def update_24(self, update_time: Optional[str] = '09:00'):
+        """
+        Calls the update_worksheet method at a specified time everyday
+
+        Parameters
+        ----------
+        update_time : str, optional
+            Time for updating worksheets in 24 hour format (Default set to '09:00')
+        """
+
+        schedule.every().day.at(update_time).do(self.update_worksheet)
         print('Google Sheet API is Running')
         while True:
             schedule.run_pending()

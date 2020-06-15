@@ -1,0 +1,8 @@
+gspread
+oauth2client
+requests
+numpy
+schedule
+pymongo
+flask
+pillow
