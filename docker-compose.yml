@@ -34,8 +34,6 @@ services:
       ./Dockerfiles/app
     volumes:
     - .:/main
-    ports:
-    - 5000:5000
     depends_on:
       - mongo
       - db

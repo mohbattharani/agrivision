@@ -34,6 +34,8 @@ class DbUp:
         Database to be initialized and used for storing data
     collection : Dict
         Contains documents containing dota about each image captured from camera nodes.
+    date_format : str, optional
+        Date format of the starting and ending date (Default is '%Y-%m-%d')
 
     Methods
     -------
@@ -43,7 +45,7 @@ class DbUp:
         Adds data from the specified starting date till the number of days to the database
     """
 
-    def __init__(self, db: str, clc: str):
+    def __init__(self, db: str, clc: str, date_format: Optional[str] = '%Y-%m-%d'):
         """
         Parameters
         ----------
@@ -59,6 +61,8 @@ class DbUp:
         self.collection = self.db[clc]
         # creating index for GEO spatial data
         self.collection.create_index([('location', GEO2D)])
+
+        self.date_format = date_format
 
 
     def images_add(self, date: str):
@@ -106,7 +110,8 @@ class DbUp:
                 warnings.warn('Folder for {} date does not exist'.format(date))
                 # TODO
                 # Dump this folder date to some array to process it later
-        print('database updated on {}'.format(date))
+        current_date = datetime.now().strftime(self.date_format)
+        print('database updated on {}'.format(current_date))
 
     def add_to_database(self):
         """
@@ -116,7 +121,7 @@ class DbUp:
         current_date = datetime.now()
         # get last date by subtracting 1 day time from current date
         yesterday_date = current_date - timedelta(days=1)
-        y_date_format = yesterday_date.strftime('%Y-%m-%d')
+        y_date_format = yesterday_date.strftime(self.date_format)
         print('Adding Images')
 
         self.images_add(y_date_format)
@@ -147,13 +152,13 @@ class DbUp:
         """
 
         # get last date by subtracting 1 day time from current date
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        start_date = datetime.strptime(start_date, self.date_format)
 
         for day in range(num_days + 1):
             date = start_date + timedelta(days=day)
-            date_format = date.strftime('%Y-%m-%d')
-            print(f'Adding Images for date {date_format}')
-            self.images_add(date_format)
+            data_date = date.strftime(self.date_format)
+            print(f'Adding Images for date {data_date}')
+            self.images_add(data_date)
 
 
 if __name__ == '__main__':

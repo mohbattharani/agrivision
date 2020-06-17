@@ -244,5 +244,5 @@ class GoogleSheetApi:
 
 
 if __name__ == '__main__':
-    gsheet_api = GoogleSheetApi(starting_date='2020-05-24', reset=False)
+    gsheet_api = GoogleSheetApi(starting_date='2020-05-24', reset=True)
     gsheet_api.update_24()
