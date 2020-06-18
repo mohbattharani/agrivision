@@ -45,7 +45,7 @@ class DbUp:
         Adds data from the specified starting date till the number of days to the database
     """
 
-    def __init__(self, db: str, clc: str, date_format: Optional[str] = '%Y-%m-%d'):
+    def __init__(self, db: str, clc: str, starting_date: Optional[str] = None, date_format: Optional[str] = '%Y-%m-%d'):
         """
         Parameters
         ----------
@@ -53,6 +53,8 @@ class DbUp:
             Name of the Database to be initialized and used
         clc: str
             Name of the collection in the database where data will be stored
+        starting_date : str, optional
+            starting date from which the data is supposed to be added to database
         """
 
         # specify which db to use
@@ -62,6 +64,7 @@ class DbUp:
         # creating index for GEO spatial data
         self.collection.create_index([('location', GEO2D)])
 
+        self.starting_date = starting_date
         self.date_format = date_format
 
 
@@ -121,18 +124,27 @@ class DbUp:
         current_date = datetime.now()
         # get last date by subtracting 1 day time from current date
         yesterday_date = current_date - timedelta(days=1)
-        y_date_format = yesterday_date.strftime(self.date_format)
+
         print('Adding Images')
 
-        self.images_add(y_date_format)
+        # check if starting date is mentioned
+        if self.starting_date is not None:
+            days_diff = abs((yesterday_date - datetime.strptime(self.starting_date, self.date_format)).days)
+            for date_inc in range(days_diff+1):
+                date = (datetime.strptime(self.starting_date, self.date_format) + timedelta(days=date_inc)).strftime(
+                                                                                                    self.date_format)
+                self.images_add(date)
+        else:
+            y_date_format = yesterday_date.strftime(self.date_format)
+            self.images_add(y_date_format)
 
     def update_24(self):
         """
         Calls add_to_database function every 24 hours
         """
 
-        # schedule.every().day.at('00:01').do(self.add_to_database)
-        schedule.every(25).seconds.do(self.add_to_database)
+        schedule.every().day.at('00:01').do(self.add_to_database)
+        # schedule.every(25).seconds.do(self.add_to_database)
         print('Database is UP')
         # schedule.run_all()
         while True:
@@ -162,6 +174,6 @@ class DbUp:
 
 
 if __name__ == '__main__':
-    server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
-    # server.update_24()
-    server.get_all_data('2020-05-10', num_days=25)
+    server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'), starting_date='2020-05-10')
+    server.update_24()
+    # server.get_all_data('2020-05-10', num_days=25)
