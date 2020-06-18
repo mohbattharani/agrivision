@@ -1,6 +1,5 @@
-FROM ubuntu:18.04
+FROM python:3.7-slim
 RUN apt-get update
-RUN apt-get install -y python3 python3-pip
-RUN pip3 install flask pymongo numpy
+RUN pip install flask pymongo numpy
 CMD mkdir main
 WORKDIR main
