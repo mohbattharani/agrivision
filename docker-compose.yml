@@ -45,7 +45,7 @@ services:
     depends_on:
       - mongo
       - db
-      - OD_model
+      - od_model
       - backup
     command: python3 app.py
 
