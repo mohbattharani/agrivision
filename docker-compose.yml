@@ -12,13 +12,21 @@ services:
       - mongo
     command: python3 db_script.py
 
-  model:
-    build: ./Dockerfiles/model
+  OD_model:
+    build: Dockerfiles/OD_model
     volumes:
     - .:/main
     depends_on:
       - mongo
     command: python3 yolo_db.py
+
+  SG_model:
+    build: Dockerfiles/SG_model
+    volumes:
+      - .:/main
+    depends_on:
+      - mongo
+    command: python3 segmentation_db.py
 
   backup:
     build:
@@ -37,7 +45,7 @@ services:
     depends_on:
       - mongo
       - db
-      - model
+      - OD_model
       - backup
     command: python3 app.py
 
@@ -48,7 +56,7 @@ services:
     - .:/main
     depends_on:
       - flask_app
-    command: python3 gsheets_api.py
+    command: python3 OD_gsheets.py & python3 SG_gsheets.py
 
 volumes:
   mongodb:

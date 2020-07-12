@@ -55,6 +55,8 @@ class DbUp:
             Name of the collection in the database where data will be stored
         starting_date : str, optional
             starting date from which the data is supposed to be added to database
+        date_format : str, optional
+            Date format of the starting and ending date (Default is '%Y-%m-%d')
         """
 
         # specify which db to use

@@ -4,7 +4,7 @@ from PIL import Image
 from pymongo import MongoClient
 
 import cfg
-from model.yolo import YOLO
+from OD_model.yolo import YOLO
 
 client = MongoClient(cfg.mongo_cfg.get('db_server').get('host'), int(cfg.mongo_cfg.get('db_server').get('port')))
 db = client[cfg.mongo_cfg.get('db_name')]
@@ -13,7 +13,7 @@ collection = db[cfg.mongo_cfg.get('db_raw_clc')]
 
 def db(yolo_model, save=False):
     while True:
-        documents = collection.find({"Predictions": {"$exists": False}})
+        documents = collection.find({"OD_Predictions": {"$exists": False}})
         for document in documents:
             id = document.get('_id')
             cam_id, folder_name, image_name = id.split('_')
@@ -33,7 +33,7 @@ def db(yolo_model, save=False):
             else:
                 annot = yolo_model.detect_image(image)
 
-            collection.update_one({'_id': id}, {'$set': {'Predictions': annot}})
+            collection.update_one({'_id': id}, {'$set': {'OD_Predictions': annot}})
 
 
 if __name__ == '__main__':

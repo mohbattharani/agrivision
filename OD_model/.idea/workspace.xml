@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="59b1e09c-9985-4e8a-a8b1-ec7474d90b7e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1TY6PMmPabY5Mg9zJN67qvd7j0l" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../git/ocr_keras" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="59b1e09c-9985-4e8a-a8b1-ec7474d90b7e" name="Default Changelist" comment="" />
+      <created>1573624656846</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1573624656846</updated>
+      <workItem from="1573624666570" duration="4350000" />
+      <workItem from="1573826169803" duration="6000" />
+      <workItem from="1581079376609" duration="10800000" />
+      <workItem from="1581422876234" duration="390000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="566" y="165" width="524" height="594" key="FileChooserDialogImpl" timestamp="1581423263761">
+      <screen x="67" y="27" width="1533" height="873" />
+    </state>
+    <state x="566" y="165" width="524" height="594" key="FileChooserDialogImpl/67.27.1533.873/1600.0.1600.900@67.27.1533.873" timestamp="1581423263761" />
+    <state x="248" y="296" key="com.intellij.ide.util.TipDialog" timestamp="1581423225850">
+      <screen x="67" y="27" width="1533" height="873" />
+    </state>
+    <state x="248" y="296" key="com.intellij.ide.util.TipDialog/67.27.1533.873/1600.0.1600.900@67.27.1533.873" timestamp="1581423225850" />
+  </component>
+</project>

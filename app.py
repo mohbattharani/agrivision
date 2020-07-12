@@ -2,11 +2,11 @@
 Flask application that communicates with the MongoDB database and retrieves meaningful data.
 
 The app routes on the following links on the default port 5000:
-    * /day_graph - Calls day_graph function from the ApiCall class in the api_calls module
-    * /range_graph - Calls range_graph function from the ApiCall class in api_calls module
-    * /total_trash_hour - Calls max_trash_hours function from the ApiCall class in api_calls module
-    * /max_trash_day - Calls max_trash_days function from the ApiCall class in api_calls module
-    * /max_trash_month - Calls range_graph function from the ApiCall class in api_calls module
+    * /day_graph - Calls day_graph function from the ODApiCall class in the api_calls module
+    * /range_graph - Calls range_graph function from the ODApiCall class in api_calls module
+    * /total_trash_hour - Calls max_trash_hours function from the ODApiCall class in api_calls module
+    * /max_trash_day - Calls max_trash_days function from the ODApiCall class in api_calls module
+    * /max_trash_month - Calls range_graph function from the ODApiCall class in api_calls module
 
 Examples
 curl -H "Content-Type: application/json" -X POST -d '{"start_date":"2020-04-26", "end_date":"2020-04-28",
@@ -15,17 +15,17 @@ curl -H "Content-Type: application/json" -X POST -d '{"start_date":"2020-04-26",
 
 import json
 from flask import Flask, request, jsonify
-from api_calls import ApiCall
+from api_calls import ODApiCall, SGApiCall
 import cfg
 
 app = Flask(__name__)
-api = ApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
-
+od_api = ODApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
+sg_api = SGApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
 
 @app.route('/day_graph', methods=['POST'])
 def day_graph():
     """
-    Calls day_graph function from the ApiCall class in the api_calls module
+    Calls day_graph function from the ODApiCall and SG class in the api_calls module
 
     Returns
     -------
@@ -45,6 +45,8 @@ def day_graph():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
 
     graph_values = api.day_graph(date=data['date'], camid=camid)
     if not graph_values:
@@ -57,7 +59,7 @@ def day_graph():
 @app.route('/range_graph', methods=['POST'])
 def range_graph():
     """
-    Calls range_graph function from the ApiCall class in api_calls module
+    Calls range_graph function from the ODApiCall class in api_calls module
 
     Returns
     -------
@@ -75,10 +77,12 @@ def range_graph():
         resp = jsonify({'status': False})
         resp.status_code = 400
         return resp
-    if 'camid' not in data:
-        graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'])
-    else:
-        graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'], camid=data['camid'])
+
+    camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
+
+    graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'], camid=camid)
     if not graph_values:
         resp = jsonify({'status': False})
         resp.status_code = 400
@@ -89,7 +93,7 @@ def range_graph():
 @app.route('/total_trash', methods=['POST'])
 def trash_count():
     """
-    Calls trash_count function from the ApiCall class in api_calls module
+    Calls trash_count function from the ODApiCall class in api_calls module
 
     Returns
     -------
@@ -104,7 +108,10 @@ def trash_count():
         resp.status_code = 400
         return resp
     camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
     date = data['date'] if 'date' in data else None
+
     total_trash = api.trash_count(camid=camid, date=date)
 
     return jsonify(total_trash)
@@ -113,7 +120,7 @@ def trash_count():
 @app.route('/max_trash_hour', methods=['POST'])
 def max_trash_hour():
     """
-    Calls max_trash_hours function from the ApiCall class in api_calls module
+    Calls max_trash_hours function from the ODApiCall class in api_calls module
 
     Returns
     -------
@@ -129,6 +136,8 @@ def max_trash_hour():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
     trash_hour = api.max_trash_hours(camid=camid)
 
     return jsonify(trash_hour)
@@ -137,7 +146,7 @@ def max_trash_hour():
 @app.route('/max_trash_day', methods=['POST'])
 def max_trash_day():
     """
-    Calls max_trash_days function from the ApiCall class in api_calls module
+    Calls max_trash_days function from the ODApiCall class in api_calls module
 
     Returns
     -------
@@ -153,6 +162,8 @@ def max_trash_day():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
     trash_day = api.max_trash_days(camid=camid)
 
     return jsonify(trash_day)
@@ -161,7 +172,7 @@ def max_trash_day():
 @app.route('/max_trash_month', methods=['POST'])
 def max_trash_month():
     """
-    Calls range_graph function from the ApiCall class in api_calls module
+    Calls range_graph function from the ODApiCall class in api_calls module
 
     Returns
     -------
@@ -176,6 +187,8 @@ def max_trash_month():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
+    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    api = od_api if model is 'OD' else sg_api
     trash_month = api.max_trash_month(camid=camid)
 
     return jsonify(trash_month)
