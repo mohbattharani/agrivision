@@ -84,4 +84,4 @@ def predict_(input_img):
     ret,thresh = cv2.threshold(label,127, 255, 0)
     thresh = thresh.astype(np.uint8)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    return contours
+    return len(contours)
