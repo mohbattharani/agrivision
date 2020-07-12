@@ -12,7 +12,7 @@ services:
       - mongo
     command: python3 db_script.py
 
-  OD_model:
+  od_model:
     build: Dockerfiles/OD_model
     volumes:
     - .:/main
@@ -20,7 +20,7 @@ services:
       - mongo
     command: python3 yolo_db.py
 
-  SG_model:
+  sg_model:
     build: Dockerfiles/SG_model
     volumes:
       - .:/main
