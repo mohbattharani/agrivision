@@ -1,6 +1,5 @@
 import os
 
-from PIL import Image
 from pymongo import MongoClient
 
 import cfg
