@@ -45,7 +45,7 @@ def day_graph():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
 
     graph_values = api.day_graph(date=data['date'], camid=camid)
@@ -79,7 +79,7 @@ def range_graph():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
 
     graph_values = api.range_graph(start_date=data['start_date'], end_date=data['end_date'], camid=camid)
@@ -108,7 +108,7 @@ def trash_count():
         resp.status_code = 400
         return resp
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
     date = data['date'] if 'date' in data else None
 
@@ -136,7 +136,7 @@ def max_trash_hour():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
     trash_hour = api.max_trash_hours(camid=camid)
 
@@ -162,7 +162,7 @@ def max_trash_day():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
     trash_day = api.max_trash_days(camid=camid)
 
@@ -187,7 +187,7 @@ def max_trash_month():
         return resp
 
     camid = data['camid'] if 'camid' in data else None
-    model = data['OD_model'] if 'OD_model' in data else 'OD'
+    model = data['model'] if 'model' in data else 'OD'
     api = od_api if model is 'OD' else sg_api
     trash_month = api.max_trash_month(camid=camid)
 

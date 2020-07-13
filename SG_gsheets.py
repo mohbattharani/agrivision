@@ -150,9 +150,9 @@ class GoogleSheetApi:
             end_date = latest_date.strftime(self.date_format)
 
             if camid is not None:
-                req = {"start_date": start_date, "end_date": end_date, 'camid': camid, 'OD_model': 'SG'}
+                req = {"start_date": start_date, "end_date": end_date, 'camid': camid, 'model': 'SG'}
             else:
-                req = {"start_date": start_date, "end_date": end_date, 'OD_model': 'SG'}
+                req = {"start_date": start_date, "end_date": end_date, 'model': 'SG'}
 
             req = json.dumps(req)
             x = requests.post(cfg.api_urls.get('range_data'), data=req)
@@ -167,9 +167,9 @@ class GoogleSheetApi:
         else:
             date = latest_date.strftime(self.date_format)
             if camid is not None:
-                req = {"date": date, "camid": camid, 'OD_model': 'SG'}
+                req = {"date": date, "camid": camid, 'model': 'SG'}
             else:
-                req = {"date": date, 'OD_model': 'SG'}
+                req = {"date": date, 'model': 'SG'}
 
             req = json.dumps(req)
             x = requests.post(cfg.api_urls.get('total_trash'), data=req)
@@ -226,7 +226,7 @@ class GoogleSheetApi:
         # Set starting date to None after adding data to sheet
         self.starting_date = None
 
-    def update_24(self, update_time: Optional[str] = '09:00'):
+    def update_24(self, update_time: Optional[str] = '10:50'):
         """
         Calls the update_worksheet method at a specified time everyday
 
