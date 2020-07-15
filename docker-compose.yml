@@ -49,7 +49,7 @@ services:
       - backup
     command: python3 app.py
 
-  gsheets:
+  od_gsheets:
     build:
       ./Dockerfiles/gsheets
     volumes:
@@ -57,6 +57,15 @@ services:
     depends_on:
       - flask_app
     command: python3 OD_gsheets.py
+
+  sg_gsheets:
+    build:
+      ./Dockerfiles/gsheets
+    volumes:
+      - .:/main
+    depends_on:
+      - flask_app
+    command: python3 SG_gsheets.py
 
 volumes:
   mongodb:
