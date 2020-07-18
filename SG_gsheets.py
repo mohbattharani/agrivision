@@ -52,7 +52,7 @@ class GoogleSheetApi:
         credential_path : str, optional
             Path to the credential file for google drive access (Default is 'drive-credentials.json')
         sheet_name : str, optional
-            Name of the sheet to be accessed (Default is 'Trash_DB')
+            Name of the sheet to be accessed (Default is 'SG_DB')
         starting_date : str, optional
             starting date from which the data is supposed to be retrieved
         date_format : str, optional
@@ -226,7 +226,7 @@ class GoogleSheetApi:
         # Set starting date to None after adding data to sheet
         self.starting_date = None
 
-    def update_24(self, update_time: Optional[str] = '09:00'):
+    def update_24(self, update_time: Optional[str] = '14:00'):
         """
         Calls the update_worksheet method at a specified time everyday
 
