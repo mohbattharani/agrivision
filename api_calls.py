@@ -380,8 +380,35 @@ class ODApiCall:
 
         return max_month
 
-
 class SGApiCall:
+    """
+    A class for extracting meaningful data from the MongoDB Database
+
+    Attributes
+    ----------
+    db : MongoClient
+        Database to be initialized and used for storing data
+    collection : Dict
+        Contains documents containing dota about each image captured from camera nodes.
+
+    Methods
+    -------
+    image_count(camid=None)
+        Calculates total number of images of all camera nodes or a specific camera node if camid is specified
+    trash_count(camid=None, date=None)
+        Calculates total number of trash detected according to parameters specified.
+    day_graph(camid=None, date=None)
+        Calculates number of trash according to time for a specified day.
+    range_graph(start_date, end_date, date_format='%Y%m%d', camid=None)
+        Calculates total number of trash per day between specified date range
+    max_trash_hours(camid=None)
+        Calculates the time for maximum trash detected during the day
+    max_trash_days(camid=None)
+        Calculates Day of the month which gives the maximum trash
+    max_trash_month(camid=None)
+        Calculates month which gives maximum trash over the year in the dataset
+    """
+
     def __init__(self, db: str, clc: str):
         """
         Parameters
@@ -396,6 +423,25 @@ class SGApiCall:
         self.db = client[db]
         # specify which collection to use
         self.collection = self.db[clc]
+
+    def image_count(self, camid: Optional[str] = None):
+        """
+        Calculates total number of images of all camera nodes or a specific camera node if camid is specified
+
+        Parameters
+        ----------
+        camid : str, optional
+            Camera ID of camera node for which the data is supposed to be retrieved (Default is None).
+
+        Returns
+        -------
+        Image count
+        """
+
+        if camid is None:
+            return self.collection.count()
+        else:
+            return self.collection.find({"cam_id": camid}).count()
 
     # get documents that contain predictions
     def prediction_documents(self, camid: Optional[str] = None, date: Optional[str] = None):
@@ -429,9 +475,9 @@ class SGApiCall:
 
         return documents
 
-    def trash_area(self, camid: Optional[str] = None, date: Optional[str] = None):
+    def trash_count(self, camid: Optional[str] = None, date: Optional[str] = None):
         """
-        Calculates total area of trash detected according to parameters specified.
+        Calculates total number of trash detected according to parameters specified.
 
         Parameters
         ----------
@@ -447,12 +493,12 @@ class SGApiCall:
         """
 
         documents = self.prediction_documents(camid=camid, date=date)
-        trash_area = 0
+        count = 0
         for document in documents:
             pred = document.get("SG_Predictions")
-            trash_area += pred['Trash_Area']
+            count += int(pred)
 
-        return trash_area
+        return count
 
     def day_graph(self, camid: Optional[str] = None, date: Optional[str] = None):
         """
@@ -473,14 +519,14 @@ class SGApiCall:
         documents = self.prediction_documents(camid=camid, date=date)
 
         times = []
-        trash_area = []
+        count = []
 
         for document in documents:
             pred = document.get("SG_Predictions")
             times.append(document.get("time"))
-            trash_area.append(pred['Trash_Area'])
+            count.append(int(pred))
 
-        return dict(zip(times, trash_area))
+        return dict(zip(times, count))
 
     def range_graph(self, start_date: str, end_date: str, date_format: Optional[str] = '%Y-%m-%d', camid: Optional[str] = None):
         """
@@ -507,7 +553,7 @@ class SGApiCall:
         dates = [(datetime.strptime(start_date, date_format) + timedelta(inc)).strftime('%Y-%m-%d')
                  for inc in range(0, days_diff + 1)]
 
-        trash_area = np.zeros(len(dates))
+        count = np.zeros(len(dates))
         if camid is None:
             documents = self.collection.find({"date": {'$in': dates}, "SG_Predictions": {"$exists": True}})
         else:
@@ -521,9 +567,9 @@ class SGApiCall:
             # Find index of the date in dates array
             index = np.where(dates == date)[0]
             # Add total number of trash detected to the corresponding index
-            trash_area[index] += len(pred)
+            count[index] += int(pred)
 
-        return dict(zip(dates, trash_area))
+        return dict(zip(dates, count))
 
     def max_trash_hours(self, camid: Optional[str] = None):
         """
@@ -543,22 +589,22 @@ class SGApiCall:
         documents = self.prediction_documents(camid=camid)
 
         times = []
-        trash_area = []
+        count = []
 
         for document in documents:
             pred = document.get("SG_Predictions")
             times.append(document.get("time"))
-            trash_area.append(pred['Trash_Area'])
+            count.append(int(pred))
 
         # time filtering
         u_times = list(set(times))
-        area = np.array(trash_area)
+        count = np.array(count)
         trash_count_hours = np.zeros(23)  # 24 hours time
         for time in u_times:
             # Find indexes containing time in times
             mask = np.where(times == time)[0]
             # Sum to calculate total number of trash
-            trash_count = np.sum(area[mask])
+            trash_count = np.sum(count[mask])
             # Get hour
             time_slot = int(time.split('-')[0])
             # Add trash count to corresponding time slot index in array
@@ -594,7 +640,7 @@ class SGApiCall:
 
         for document in documents:
             dates_data.append(document.get("date"))
-            count_data.append(len(document.get("SG_Predictions")))
+            count_data.append(int(document.get("SG_Predictions")))
 
         # Converting all data into single day
         dates = list(set(dates_data))
@@ -628,7 +674,7 @@ class SGApiCall:
         for document in documents:
             date = document.get("date")
             day_index = int(date.split('-')[2])
-            total_days_month[day_index] += len(documents.get("SG_Predictions"))
+            total_days_month[day_index] += int(documents.get("SG_Predictions"))
         max_day = str(max(total_days_month))
 
         # trash_count_days = self.day_data_filtering(documents)

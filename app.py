@@ -22,6 +22,7 @@ app = Flask(__name__)
 od_api = ODApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
 sg_api = SGApiCall(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'))
 
+
 @app.route('/day_graph', methods=['POST'])
 def day_graph():
     """
