@@ -226,7 +226,7 @@ class GoogleSheetApi:
         # Set starting date to None after adding data to sheet
         self.starting_date = None
 
-    def update_24(self, update_time: Optional[str] = '09:02'):
+    def update_24(self, update_time: Optional[str] = '09:00'):
         """
         Calls the update_worksheet method at a specified time everyday
 
@@ -237,7 +237,7 @@ class GoogleSheetApi:
         """
 
         schedule.every().day.at(update_time).do(self.update_worksheet)
-        print('Google Sheet API is Running')
+        print('Segmentation Google Sheet API is Running')
         while True:
             schedule.run_pending()
             time.sleep(1)
