@@ -236,11 +236,18 @@ class GoogleSheetApi:
             Time for updating worksheets in 24 hour format (Default set to '09:00')
         """
 
-        schedule.every().day.at(update_time).do(self.update_worksheet)
-        print('Google Sheet API is Running')
+        schedule.every(25).seconds.do(self.update_worksheet())
+        print('Segmentation Sheet')
+        schedule.run_all()
         while True:
             schedule.run_pending()
             time.sleep(1)
+        #
+        # schedule.every().day.at(update_time).do(self.update_worksheet)
+        # print('Google Sheet API is Running')
+        # while True:
+        #     schedule.run_pending()
+        #     time.sleep(1)
 
 
 if __name__ == '__main__':
