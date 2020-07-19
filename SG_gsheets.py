@@ -226,7 +226,7 @@ class GoogleSheetApi:
         # Set starting date to None after adding data to sheet
         self.starting_date = None
 
-    def update_24(self, update_time: Optional[str] = '14:00'):
+    def update_24(self, update_time: Optional[str] = '18:30'):
         """
         Calls the update_worksheet method at a specified time everyday
 
