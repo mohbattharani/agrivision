@@ -20,13 +20,13 @@ services:
       - mongo
     command: python3 yolo_db.py
 
-  sg_model:
-    build: Dockerfiles/SG_model
-    volumes:
-      - .:/main
-    depends_on:
-      - mongo
-    command: python3 segmentation_db.py
+#  sg_model:
+#    build: Dockerfiles/SG_model
+#    volumes:
+#      - .:/main
+#    depends_on:
+#      - mongo
+#    command: python3 segmentation_db.py
 
   backup:
     build:

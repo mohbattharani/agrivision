@@ -19,9 +19,9 @@ from OD_model.yolo3.utils import letterbox_image
 
 class YOLO(object):
     _defaults = {
-        "model_path": os.path.join('OD_model','logs', 'yolo-attention-log-multiply','trained_weights_final.h5'),
-        "anchors_path": os.path.join('OD_model','model_data','yolo_anchors.txt'),
-        "classes_path": os.path.join('OD_model','model_data','garbage_classes.txt'),
+        "model_path": os.path.join('OD_model', 'logs', 'yolo-attention-log-multiply_pi', 'trained_weights_final.h5'),
+        "anchors_path": os.path.join('OD_model', 'model_data', 'yolo_anchors.txt'),
+        "classes_path": os.path.join('OD_model', 'model_data', 'garbage_classes.txt'),
         "score" : 0.5,
         "iou" : 0.45,
         "model_image_size" : (416, 416),

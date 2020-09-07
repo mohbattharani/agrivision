@@ -74,7 +74,7 @@ def predict_(input_img):
     input_=input_.reshape(1,256,256,3)
     input_=input_/255
     pre=model.predict(input_)
-    pre=pre.reshape(256,256,3)
+    pre=pre.reshape(256, 256, 3)
     pre=np.argmax(pre, axis=-1)
     label = keras.utils.to_categorical(pre,3)
     label[:,:,0]=label[:,:,1]

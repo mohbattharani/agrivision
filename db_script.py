@@ -145,7 +145,7 @@ class DbUp:
         Calls add_to_database function every 24 hours
         """
 
-        schedule.every().day.at('00:01').do(self.add_to_database)
+        schedule.every().day.at('01:00').do(self.add_to_database)
         # schedule.every(25).seconds.do(self.add_to_database)
         print('Database is UP')
         # schedule.run_all()
@@ -176,6 +176,6 @@ class DbUp:
 
 
 if __name__ == '__main__':
-    server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'), starting_date='2020-05-10')
-    # server.update_24()
-    server.get_all_data('2020-05-10', num_days=25)
+    server = DbUp(cfg.mongo_cfg.get('db_name'), cfg.mongo_cfg.get('db_raw_clc'), starting_date='2020-09-07')
+    server.update_24()
+    # server.get_all_data('2020-05-10', num_days=25)
