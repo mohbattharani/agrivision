@@ -5,7 +5,7 @@ services:
     image: mongo:4.2.3
 
   server_sync:
-    build: ./Dockerfiles/sync
+    build: ./Dockerfiles/ftp_sync
     volumes:
       - .:/main
     command: python3 server_sync.py
