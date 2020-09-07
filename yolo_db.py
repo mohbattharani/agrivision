@@ -22,18 +22,20 @@ def db(yolo_model, save=False):
             # image_name = id[2]
             image_path = os.path.join(cfg.directories.get('main_dir'), cam_id,
                                       folder_name, image_name + '.jpg')
-            image = Image.open(image_path)
-
-            if save is True:
-                image, annot = yolo_model.detect_image(image, save)
-                save_dir = cfg.directories.get('save_dir')
-                if not os.path.exists(save_dir):
-                    os.mkdir(save_dir)
-                image.save(os.path.join(save_dir,cam_id,folder_name,image_name + '.jpg'))
-            else:
-                annot = yolo_model.detect_image(image)
-
-            collection.update_one({'_id': id}, {'$set': {'OD_Predictions': annot}})
+            try:
+                image = Image.open(image_path)
+                if save is True:
+                    image, annot = yolo_model.detect_image(image, save)
+                    save_dir = cfg.directories.get('save_dir')
+                    if not os.path.exists(save_dir):
+                        os.mkdir(save_dir)
+                    image.save(os.path.join(save_dir,cam_id,folder_name,image_name + '.jpg'))
+                else:
+                    annot = yolo_model.detect_image(image)
+                collection.update_one({'_id': id}, {'$set': {'OD_Predictions': annot}})
+            # In case we get corrupted file from server
+            except:
+                collection.update_one({'_id': id}, {'$set': {'OD_Predictions': []}})
 
 
 if __name__ == '__main__':
