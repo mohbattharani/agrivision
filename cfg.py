@@ -1,6 +1,6 @@
 mongo_cfg = {'db_server': {'host': 'mongo', 'port': '27017'}, 'db_name': 'trash', 'db_raw_clc': 'main', 'db_manual_clc': 'manual'}
 directories = {'main_dir': 'camfeed', 'save_dir': 'results'}
-ftp_server = {'username': 'lums/abdul_amin', 'password': 'Lums12345'}
+ftp_server = {'address': '10.99.0.66', 'username': 'lums/abdul_amin', 'password': 'Lums12345'}
 # camid: {longitude,latitude,description}
 # Don't use underscore in camera id
 cam_info = {'LUMS': {'longitude': 74.409863, 'latitude': 31.472780, 'description': 'Rohi Nala-xx'}}

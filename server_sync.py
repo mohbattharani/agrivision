@@ -16,7 +16,7 @@ class SyncData:
         self.server_address = server_address
 
     def server_sync(self):
-        sess = ftplib.FTP(self.server_address)
+        sess = ftplib.FTP(cfg.ftp_server.get('address'))
         sess.login(cfg.ftp_server.get('username'), cfg.ftp_server.get('password'))
         for cam in cfg.cam_info.keys():
             sess.cwd(os.path.join(self.server_dir, cam))
