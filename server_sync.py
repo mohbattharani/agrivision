@@ -24,7 +24,8 @@ class SyncData:
                     local_files = os.listdir(os.path.join(self.local_dir, cam, folder))
                 except FileNotFoundError:
                     local_files = []
-                    os.mkdir(os.path.join(self.local_dir, cam))
+                    if not os.path.exists(os.path.join(self.local_dir, cam)):
+                        os.mkdir(os.path.join(self.local_dir, cam))
                     os.mkdir(os.path.join(self.local_dir, cam, folder))
 
                 server_files = [k for k in sess.nlst() if '.jpg' in k]
