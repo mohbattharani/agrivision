@@ -9,12 +9,14 @@ import cfg
 
 
 class SyncData:
-    def __init__(self, local_dir: Optional[str] = './camfeed', server_dir: Optional[str] = '/camfeed'):
+    def __init__(self, local_dir: Optional[str] = './camfeed', server_dir: Optional[str] = '/camfeed', server_address:
+                 Optional[str] = '10.99.0.66'):
         self.local_dir = local_dir
         self.server_dir = server_dir
+        self.server_address = server_address
 
     def server_sync(self):
-        sess = ftplib.FTP(cfg.ftp_server.get('address'))
+        sess = ftplib.FTP(self.server_address)
         sess.login(cfg.ftp_server.get('username'), cfg.ftp_server.get('password'))
         for cam in cfg.cam_info.keys():
             sess.cwd(os.path.join(self.server_dir, cam))
