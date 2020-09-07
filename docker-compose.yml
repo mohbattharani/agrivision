@@ -4,6 +4,12 @@ services:
   mongo:
     image: mongo:4.2.3
 
+  server_sync:
+    build: ./Dockerfiles/sync
+    volumes:
+      - .:/main
+    command: python3 server_sync.py
+
   db:
     build: ./Dockerfiles/db
     volumes:

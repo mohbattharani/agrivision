@@ -145,7 +145,7 @@ class DbUp:
         Calls add_to_database function every 24 hours
         """
 
-        schedule.every().day.at('01:00').do(self.add_to_database)
+        schedule.every().day.at('03:00').do(self.add_to_database)
         # schedule.every(25).seconds.do(self.add_to_database)
         print('Database is UP')
         # schedule.run_all()

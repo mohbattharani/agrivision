@@ -39,7 +39,7 @@ class SyncData:
 
         schedule.every().day.at('00:01').do(self.server_sync)
         print('Syncing Files')
-        schedule.run_all()
+        # schedule.run_all()
         while True:
             schedule.run_pending()
             time.sleep(1)
