@@ -9,11 +9,9 @@ import cfg
 
 
 class SyncData:
-    def __init__(self, local_dir: Optional[str] = './camfeed', server_dir: Optional[str] = '/camfeed', server_address:
-                 Optional[str] = '10.99.0.66'):
+    def __init__(self, local_dir: Optional[str] = './camfeed', server_dir: Optional[str] = '/camfeed'):
         self.local_dir = local_dir
         self.server_dir = server_dir
-        self.server_address = server_address
 
     def server_sync(self):
         sess = ftplib.FTP(cfg.ftp_server.get('address'))
@@ -34,7 +32,7 @@ class SyncData:
                 if file_difference:
                     for file in file_difference:
                         with open(os.path.join(self.local_dir, cam, folder, file), 'wb') as ftpfile:
-                            sess.retrbinary('RETR' + file, ftpfile.write)
+                            sess.retrbinary('RETR ' + file, ftpfile.write)
 
     def update_24(self):
 
